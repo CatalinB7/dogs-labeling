@@ -1,12 +1,30 @@
-const nbPics = 8;
+const noPics = 8;
 const picWidth = 300;
 let name = null;
-let clickedButton = async () => {
-    let data = await getData(nbPics);
+
+document.querySelector('.form-btn').addEventListener("click", clickedStartButton)
+document.querySelector('.refresh-btn').addEventListener("click", clickedRefreshButton)
+document.querySelectorAll('.request-btn')[0].addEventListener("click", clickedRequestButton);
+document.querySelectorAll('.request-btn')[1].addEventListener("click", clickedRequestButton);
+
+async function clickedStartButton() {
+    await sendName();
+    let data = await getData(noPics);
     changeAppearance(data);
 }
 
-document.querySelector('.form-btn').addEventListener("click", clickedButton) // why clickedButton didnt require event as parameter?
+async function clickedRefreshButton() {
+    let data = await getData(noPics);
+    displayNewPics(data);
+}
+
+let displayNewPics = (data) => {
+    let imgs = document.querySelectorAll("img");
+    for (let i = 0; i < noPics; i++) {
+        imgs[i].onload = onLoadImg;
+        imgs[i].src = data.message[i];
+    }
+}
 
 let getData = async (nb) => {
     //prolly needs a try catch?
@@ -18,39 +36,38 @@ let changeAppearance = (data) => {
     let mainContainer = document.querySelector('.main-container');
     mainContainer.style.display = "none";
 
-
-
-
-    let imgs = document.querySelectorAll("img");
-    for (let i = 0; i < nbPics; i++) {
-        imgs[i].onload = onLoadImg;
-        imgs[i].src = data.message[i];
+    //creating cards containing pics and 2 buttons
+    for(let i = 0; i < noPics; i++) {
+        let div = document.createElement("div");
+        div.className = 'card-div';
+        let img = document.createElement("img");
+        img.alt = "Doggo";
+        img.className = "pics";
+        let button1 = document.createElement("button");
+        let button2 = document.createElement("button");
+        button1.className = button2.className = "form-btn card-button";
+        button1.innerText = "Silly";
+        button2.innerText = "Adorable";
+        div.append(img, button1, button2);
+        document.querySelector(".pics-container").append(div);
     }
 
+    displayNewPics(data);
     let divPicsRef = document.querySelector(".pics-container");
     divPicsRef.style.display = "flex";
 }
 
 function onLoadImg() {
-    let ratio = this.naturalHeight / this.naturalWidth;
     this.style.width = picWidth.toString() + "px";
-    this.style.height = (picWidth * ratio).toString() + "px";
 }
 
-/*
-Should append to (<div class="pics-container">) nbPics divs containing {
-    img
-    2 buttons: scarry or adorable
+let sendName = async () => {
+    let name = document.getElementById('name').value;
+    //TODO
 }
 
-something like this:
-    for(let i = 0; i < nbPics; i++) {
-        let div = document.createElement("div");
-        let img = document.createElement("img");
-        let button1 = document.createElement("button");
-        let button2 = document.createElement("button");
-        div.append(img, button1, button2);
-        document.querySelector(".pics-container").append(div);
-    }
-
-*/
+async function clickedRequestButton() {
+    let text = this.innerText;
+    text.includes("Silly")? text = "silly" : text = "adorable";
+    //TODO
+}
