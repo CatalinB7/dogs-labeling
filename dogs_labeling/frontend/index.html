@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dogs labeling</title>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script> 
+</head>
+
+<body>
+    <h1 class="title"> Dogs are awesome!</h1>
+    <div class="main-container">
+        <form class="my-form">
+            <label for="name">Enter your name:</label>
+            <input type="text" id="name">
+            <!-- <span class="iconify" data-icon="octicon-trashcan" data-inline="false"></span> -->
+            <button type="button" class="form-btn">Send it</button>
+        </form>
+    </div>
+    <div>
+        <div class="pics-container">
+            <!-- pics (created in js) are positioned inside this div -->
+            <div class="request-div-container">
+                <button class="form-btn request-btn">My Silly Dogs</button>
+                <button class="form-btn refresh-btn">Other Dogs</button>
+                <button class="form-btn request-btn">My Adorable Dogs</button>
+            </div>
+        </div>
+        <div class="pageContainer">
+            <button class="pageNav">⬅</button>
+            <button class="pageNav">➡</button>
+        </div>
+        
+    </div>
+
+    <script src="./dist/bundle.js"></script>
+</body>
+
+</html>

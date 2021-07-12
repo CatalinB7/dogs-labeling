@@ -1,0 +1,27 @@
+{
+  "private": true,
+  "scripts": {
+    "tsc": "tsc",
+    "tscw": "tsc --watch",
+    "wp": "webpack",
+    "wpw": "webpack --watch",
+    "serve": "http-server build",
+    "dev": "webpack serve"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.14.171",
+    "copy-webpack-plugin": "^9.0.1",
+    "http-server": "^0.12.3",
+    "lodash": "^4.17.21",
+    "style-loader": "^3.1.0",
+    "ts-loader": "^9.2.3",
+    "typescript": "^4.3.5",
+    "webpack": "^5.0.0",
+    "webpack-cli": "^4.7.2"
+  },
+  "devDependencies": {
+    "css-loader": "^5.2.7",
+    "html-webpack-plugin": "^5.3.2",
+    "webpack-dev-server": "^3.11.2"
+  }
+}
