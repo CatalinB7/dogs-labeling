@@ -1,66 +1,9 @@
-//probably i should manage the state in another way
-let sessionId = null;
-let currentPage = 1;
-
-export function increasePage() {
-    if (currentPage === Math.ceil(receivedLinks.length / noPics))
-        return;
-    currentPage++;
-    if (currentPage > Math.floor(receivedLinks.length / noPics))
-        currentPage = Math.floor(receivedLinks.length / noPics) + 1;
-}
-
-export function decreasePage() {
-    currentPage--;
-    if (currentPage < 1)
-        currentPage = 1;
-}
-
-export function getCurrentPage() {
-    return currentPage;
-}
-
-export function setCurrentPage(value: number) {
-    currentPage = value;
-}
-
-
-
-export const noPics = 8;
-export const picWidth = 300;
-export const alreadySent = {
-    "silly": new Array(noPics).fill(false),
-    "adorable": new Array(noPics).fill(false)
-};
-
-export function resetAlreadySent() {
-    alreadySent["silly"] = new Array(noPics).fill(false);
-    alreadySent["adorable"] = new Array(noPics).fill(false);
-}
-export function getSessionId() {
-    return sessionId;
-};
-
-export function setSessionId(id: number) {
-    sessionId = id;
-};
-
-let receivedLinks = [];
-
-export function setReceivedLinks(links: string[]) {
-    receivedLinks = links;
-}
-
-export function getReceivedLinks() {
-    return receivedLinks;
-}
-
 export function toggleNavButton() {
     let navBtns: HTMLButtonElement[] = Array.from(document.querySelectorAll(".pageNav"));
     let [leftBtn, rightBtn] = navBtns;
-    let links = getReceivedLinks();
-    let currentPage = getCurrentPage();
-    if (currentPage * noPics >= links.length) {
+    let links = state.getReceivedLinks();
+    let currentPage = state.getCurrentPage();
+    if (currentPage * state.getNoPics() >= links.length) {
         rightBtn.disabled = true;
     } else {
         rightBtn.disabled = false;
@@ -69,6 +12,108 @@ export function toggleNavButton() {
         leftBtn.disabled = false;
     else leftBtn.disabled = true;
 }
+
+export function setPageTitle(text: string) {
+    let elem = document.querySelector("h1");
+    elem.innerHTML = text;
+}
+
+
+class State {
+    static instantiated = false;
+    #currentPage = 1;
+    #noPics: number;
+    #picWidth: number;
+    #receivedLinks = [];
+    #sessionId: number;
+    #alreadySent;
+    #routes = ["login", "random_dogs", "silly_dogs", "adorable_dogs"];
+    constructor(picsPerPage: number, widthOfPic: number) {
+        if (State.instantiated) {
+            throw new Error("Already instantiated");
+        }
+        State.instantiated = true;
+        this.#noPics = picsPerPage;
+        this.#picWidth = widthOfPic;
+        this.#alreadySent = {
+            "silly": new Array(this.#noPics).fill(false),
+            "adorable": new Array(this.#noPics).fill(false)
+        };
+    }
+
+    getNoPics() {
+        return this.#noPics;
+    }
+
+    getPicWidth() {
+        return this.#picWidth;
+    }
+
+    getRoutes() {
+        return this.#routes;
+    }
+
+    addRoute(newRoute: string) {
+        this.#routes.push(newRoute);
+    }
+
+    increasePage() {
+        if (this.#currentPage === Math.ceil(this.#receivedLinks.length / this.#noPics))
+            return;
+        this.#currentPage++;
+        if (this.#currentPage > Math.floor(this.#receivedLinks.length / this.#noPics))
+            this.#currentPage = Math.floor(this.#receivedLinks.length / this.#noPics) + 1;
+    }
+
+    decreasePage() {
+        this.#currentPage--;
+        if (this.#currentPage < 1)
+            this.#currentPage = 1;
+    }
+
+    getCurrentPage() {
+        return this.#currentPage;
+    }
+
+    setCurrentPage(value: number) {
+        this.#currentPage = value;
+    }
+
+    getSessionId() {
+        return this.#sessionId;
+    };
+
+    setSessionId(id: number) {
+        this.#sessionId = id;
+    };
+
+    setReceivedLinks(links: string[]) {
+        this.#receivedLinks = links;
+    }
+
+    getReceivedLinks() {
+        return this.#receivedLinks;
+    }
+
+    getAlreadySent() {
+        return this.#alreadySent;
+    }
+
+    resetAlreadySent() {
+        this.#alreadySent["silly"] = new Array(this.#noPics).fill(false);
+        this.#alreadySent["adorable"] = new Array(this.#noPics).fill(false);
+    }
+
+    setAlreadySent(text: string, idx: number) {
+        this.#alreadySent[text][idx] = true;
+    }
+
+}
+
+export const state = new State(8, 300);
+
+
+
 
 
 

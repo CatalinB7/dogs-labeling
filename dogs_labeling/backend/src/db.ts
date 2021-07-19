@@ -1,8 +1,8 @@
 type Category = ("silly" | "adorable");
-type Dict = { [key in Category]: string[] };
+type categoriesToLinks = { [key in Category]: string[] };
 let nameToId: { [index: string]: number } = {};
 
-let idToLinks: { [index: number]: Dict } = {}; //this should be idToLinks[id]["silly" | "adorable"] = [link1, link2..]
+let idToLinks: { [index: number]: categoriesToLinks } = {}; //this should be idToLinks[id]["silly" | "adorable"] = [link1, link2..]
 
 let id: number = 0;
 
@@ -28,9 +28,7 @@ let addLink = (category: Category, loggedID: number, link: string) => {
 }
 
 let removeLink = (category: Category, loggedID: number, link: string) => {
-
     idToLinks[loggedID][category] = idToLinks[loggedID][category].filter(elem => elem != link);
-
 }
 
 export {

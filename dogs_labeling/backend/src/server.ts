@@ -1,11 +1,11 @@
 import express from "express";
 import router from "./routes";
 import cors from "cors";
-let bodyParser = require("body-parser");
+import bodyParser from "body-parser";
 
 const app = express();
-const port: number = 8080;
-// app.use(cors);
+const port = 8080;
+app.use(cors());
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");

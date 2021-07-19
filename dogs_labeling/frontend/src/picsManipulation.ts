@@ -1,5 +1,7 @@
-import { deletePreferences, postPreferences } from "./httpServices";
-import { noPics, alreadySent, resetAlreadySent, picWidth, getSessionId, setReceivedLinks, getReceivedLinks, getCurrentPage, toggleNavButton } from "./appState";
+import { genericFetch } from "./httpServices";
+import { setPageTitle, state, toggleNavButton } from "./appState";
+
+let [ noPics, picWidth ] = [ state.getNoPics(), state.getPicWidth() ];
 
 export function createCards() {
     //creating cards containing pics and 2 buttons
@@ -8,30 +10,31 @@ export function createCards() {
     }
 }
 
-export function myClosure(idx: number) {
+export function savePic(idx: number) {
     return async function clickedSavePicButton() {
         let text = this.innerText;
         text.includes("Silly") ? text = "silly" : text = "adorable";
-        if (alreadySent[text][idx]) {
-            console.log("already sent it");
+        this.disabled = true;
+        if (state.getAlreadySent()[text][idx]) {
             return;
         }
-        alreadySent[text][idx] = true;
+        state.setAlreadySent(text, idx);
         let link = document.querySelectorAll("img")[idx].src;
-        await postPreferences({ id: getSessionId(), link, category: text });
+        await genericFetch("POST", "preferences", undefined, { id: state.getSessionId(), link, category: text })
+        //await postPreferences({ id: getSessionId(), link, category: text });
     }
 }
 
 function removeImage(idx: number) {
     return async function deleteImg() {
-        let text = document.querySelector("h1").innerHTML;
+        let text = window.location.pathname;
         text = text.includes("silly") ? "silly" : "adorable";
         let link = document.querySelectorAll("img")[idx].src;
-        await deletePreferences({ id: getSessionId(), category: text, link });
-        setReceivedLinks(getReceivedLinks().filter(elem => elem != link));
-        //removeCard(idx);
-        translatePics(getCurrentPage(), idx, getReceivedLinks());
-        //insertNewCard(noPics, "none");
+        let resp = await genericFetch("DELETE", "preferences?", { id: state.getSessionId(), category: text, link }, undefined);
+        if(resp.status === 200) {
+            state.setReceivedLinks(state.getReceivedLinks().filter(elem => elem != link));
+            translatePics(state.getCurrentPage(), idx, state.getReceivedLinks());
+        }
     }
 }
 
@@ -75,8 +78,8 @@ function insertNewCard(i: number, displayedType: string) {
     icon.append(spn);
     icon.setAttribute("data-icon", "octicon-trashcan");
     icon.style.display = "none";
-    button1.addEventListener("click", myClosure(i));
-    button2.addEventListener("click", myClosure(i));
+    button1.addEventListener("click", savePic(i));
+    button2.addEventListener("click", savePic(i));
     div.append(img, button1, button2, icon);
     div.style.display = displayedType;
     document.querySelector(".pics-container").append(div);
@@ -90,7 +93,7 @@ let displayNewPics = (data: any) => {
     let btns = document.querySelectorAll(".card-button");
     let icons = document.querySelectorAll(".trashcan");
     setPageTitle("Other random dogs!");
-    resetAlreadySent();
+    state.resetAlreadySent();
     for (let i = 0; i < noPics; i++) {
         imgs[i].onload = onLoadImg;
         imgs[i].src = data.message[i];
@@ -105,15 +108,14 @@ function onLoadImg() {
     this.style.width = picWidth.toString() + "px";
 }
 
-function setPageTitle(text: string) {
-    let elem = document.querySelector("h1");
-    elem.innerHTML = text;
+export function setCardBtnsEnabled () {
+    document.querySelectorAll(".form-btn.card-button").
+    forEach(elem => (elem as HTMLButtonElement).disabled = false);
 }
-
 
 function displayNewPage(currentPage: number) {
     // interval is [ (pageNo -1 ) * noPics ... (pageNo * noPics - 1) ]
-    let links = getReceivedLinks().slice((currentPage - 1) * noPics, currentPage * noPics);;
+    let links = state.getReceivedLinks().slice((currentPage - 1) * noPics, currentPage * noPics);;
     let imgs = document.querySelectorAll("img");
     let divs = document.querySelectorAll(".card-div");
     for (let i = 0; i < links.length; i++) {

@@ -42,6 +42,12 @@ body {
     cursor: pointer;
 }
 
+.form-btn.card-button:active:not([disabled]) {
+    box-shadow: 0 3px #665;
+    transform: translateY(73px);
+    transition-duration: 0.05s;
+}
+
 .form-btn:active {
     box-shadow: 0 3px #665;
     transform: translateY(2px);
@@ -76,10 +82,8 @@ body {
     transform: translateY(75px);
 }
 
-
 .card-div:hover > .trashcan,
-.card-div:focus-within .trashcan,
-.trashcan:focus {
+.card-div:focus-within .trashcan {
     visibility: visible;
     transition: all .5s ease-in-out;
     /* transform: translateY(105px) !important; */
@@ -87,9 +91,7 @@ body {
     animation-fill-mode: forwards;
 }
 
-
 @keyframes rotation {
-
     33% {
         transform: translateY(105px);
     }
@@ -109,12 +111,7 @@ body {
         transform-origin: center 105px;
         transform: rotate(0deg) translateY(105px);
     }
-  }
-
-  .trashcan:hover {
-    animation: rotation 3s;
-    background-color: beige;
-  }
+}
 
 .card-div {
     display: flex;
@@ -149,18 +146,19 @@ body {
 }
 
 .trashcan:hover {
+    background-color: beige;
     cursor: pointer;
 }
 
 .refresh-btn {
-    min-width: 10%;
+    min-width: 95px;
     font-size: 1.2rem;
     font-weight: 500;
     margin: 40px 50px 0px 50px;
 }
 
 .request-btn {
-    min-width: 15%;
+    min-width: 135px;
     font-size: 1.2rem;
     font-weight: 500;
     margin: 40px 50px 0px 50px;
