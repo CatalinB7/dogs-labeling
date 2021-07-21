@@ -13,25 +13,70 @@
 
 <body>
     <h1 class="title"> Dogs are awesome!</h1>
+    <div id="error-div">
+        <span id="error-span">ERROR MESSAGE</span>
+        <button id="error-button">Okay!</button>
+    </div>
+    <button class="register">Register</button>
+    <button class="login">Login</button>
     <div class="main-container">
+
         <form class="my-form">
-            <label for="name">Enter your name:</label>
-            <input type="text" id="name">
-            <button type="button" class="form-btn">Send it</button>
+            <h1 id="logH1">Login Page</h1>
+
+            <div class="form-div">
+                <label for="name">Enter your name:</label>
+                <input type="text" id="name">
+            </div>
+
+            <div class="form-div">
+                <label for="password">Enter your password:</label>
+                <input type="password" id="password">
+            </div>
+            
+            <div class="form-div">
+                <button type="button" class="form-btn">Send it</button>
+            </div>
         </form>
+    </div>
+
+    
+
+    <div class="login-menu"> <span id="menu-name">numeleAici</span>
+        <ul>
+            <li>Account</li>
+            <li id="logout">Logout</li>
+        </ul>
     </div>
     <div>
         <div class="pics-container">
             <!-- pics (created in js) are positioned inside this div -->
             <div class="request-div-container">
-                <button class="form-btn request-btn">My Silly Dogs</button>
+                <!-- <button class="form-btn request-btn">silly</button> -->
                 <button class="form-btn refresh-btn">Other Dogs</button>
-                <button class="form-btn request-btn">My Adorable Dogs</button>
+                <!-- <button class="form-btn request-btn">adorable</button> -->
+                
+                <button class="edit-cat form-btn">Edit category</button>
+                <input class="change-cat-input" type="text" value="" placeholder="Edit Category">
+
+                <button class="del-cat form-btn">Delete category</button>
+
+
+                <form class="selector-form">
+                    <input class="chosen-value" type="text" value="" placeholder="Type to filter">
+                    <ul class="value-list">
+                        <!-- here js creates li elements -->
+                    </ul>
+                </form>
+
+                <button class="form-btn insertCategory">+</button>
+                <input class="insert-input" type="text" value="" placeholder="New Category">
+
             </div>
         </div>
         <div class="pageContainer">
-            <button  class="pageNav">⬅</button>
-            <button  class="pageNav">➡</button>
+            <button class="pageNav">⬅</button>
+            <button class="pageNav">➡</button>
         </div>
     </div>
 

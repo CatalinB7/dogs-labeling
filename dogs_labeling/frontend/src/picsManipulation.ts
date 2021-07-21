@@ -1,10 +1,10 @@
 import { genericFetch } from "./httpServices";
 import { setPageTitle, state, toggleNavButton } from "./appState";
 
-let [ noPics, picWidth ] = [ state.getNoPics(), state.getPicWidth() ];
+let [noPics, picWidth] = [state.getNoPics(), state.getPicWidth()];
 
 export function createCards() {
-    //creating cards containing pics and 2 buttons
+    //creating cards containing pics and n buttons, where n ==  #categories
     for (let i = 0; i < noPics; i++) {
         insertNewCard(i, "block");
     }
@@ -13,15 +13,13 @@ export function createCards() {
 export function savePic(idx: number) {
     return async function clickedSavePicButton() {
         let text = this.innerText;
-        text.includes("Silly") ? text = "silly" : text = "adorable";
         this.disabled = true;
         if (state.getAlreadySent()[text][idx]) {
             return;
         }
         state.setAlreadySent(text, idx);
         let link = document.querySelectorAll("img")[idx].src;
-        await genericFetch("POST", "preferences", undefined, { id: state.getSessionId(), link, category: text })
-        //await postPreferences({ id: getSessionId(), link, category: text });
+        await genericFetch("POST", "preferences", undefined, { id: state.getSessionId(), link, category: text, name: state.Name })
     }
 }
 
@@ -30,8 +28,8 @@ function removeImage(idx: number) {
         let text = window.location.pathname;
         text = text.includes("silly") ? "silly" : "adorable";
         let link = document.querySelectorAll("img")[idx].src;
-        let resp = await genericFetch("DELETE", "preferences?", { id: state.getSessionId(), category: text, link }, undefined);
-        if(resp.status === 200) {
+        let resp = await genericFetch("DELETE", "preferences?", { id: state.getSessionId(), category: text, link, name: state.Name }, undefined);
+        if (resp.status === 200) {
             state.setReceivedLinks(state.getReceivedLinks().filter(elem => elem != link));
             translatePics(state.getCurrentPage(), idx, state.getReceivedLinks());
         }
@@ -41,10 +39,10 @@ function removeImage(idx: number) {
 function translatePics(currentPage: number, idx: number, links: string[]) {
     let imgs: HTMLImageElement[] = Array.from(document.querySelectorAll("img"));
     let i = idx;
-    for(i; i < Math.min(noPics, links.length - (currentPage - 1) * noPics); i++) {
+    for (i; i < Math.min(noPics, links.length - (currentPage - 1) * noPics); i++) {
         imgs[i].src = links[(currentPage - 1) * noPics + i]; //first link on the next page after one got deleted
     }
-    for(i; i < noPics; i++) {
+    for (i; i < noPics; i++) {
         removeCard(i);
     }
     toggleNavButton();
@@ -58,17 +56,16 @@ function removeCard(idx: number) {
 
 function insertNewCard(i: number, displayedType: string) {
     let div = document.createElement("div");
+    let icon = document.createElement("button");
     div.className = 'card-div';
     let img = document.createElement("img");
     img.alt = "Doggo";
     img.className = "pics";
-    let button1 = document.createElement("button");
-    let button2 = document.createElement("button");
-    img.tabIndex = button1.tabIndex = button2.tabIndex = 0;
-    button1.className = button2.className = "form-btn card-button";
-    button1.innerText = "Silly";
-    button2.innerText = "Adorable";
-    let icon = document.createElement("button");
+    let divPref = document.createElement("div");
+    divPref.className = "pref-div";
+    divPref.appendChild(icon);
+    createPreferenceButton(i, divPref);
+    img.tabIndex = 0;
     icon.className = "trashcan";
     icon.addEventListener("click", removeImage(i));
     let spn = document.createElement("spn");
@@ -78,11 +75,20 @@ function insertNewCard(i: number, displayedType: string) {
     icon.append(spn);
     icon.setAttribute("data-icon", "octicon-trashcan");
     icon.style.display = "none";
-    button1.addEventListener("click", savePic(i));
-    button2.addEventListener("click", savePic(i));
-    div.append(img, button1, button2, icon);
+    div.append(img, divPref);
     div.style.display = displayedType;
     document.querySelector(".pics-container").append(div);
+}
+
+function createPreferenceButton(i: number, div: HTMLDivElement) {
+    state.Categories.forEach(cat => {
+        let btn = document.createElement("button");
+        btn.innerText = cat;
+        btn.className = "form-btn card-button";
+        btn.addEventListener("click", savePic(i));
+        btn.tabIndex = 0;
+        div.appendChild(btn);
+    });
 }
 
 
@@ -90,7 +96,9 @@ let displayNewPics = (data: any) => {
     (document.querySelector(".pageContainer") as HTMLElement).style.display = "none";
     let imgs = document.querySelectorAll("img");
     let divs = document.querySelectorAll(".card-div");
-    let btns = document.querySelectorAll(".card-button");
+    document.querySelectorAll(".card-button").forEach(btn => {
+        (btn as HTMLElement).style.display = "block";
+    })
     let icons = document.querySelectorAll(".trashcan");
     setPageTitle("Other random dogs!");
     state.resetAlreadySent();
@@ -98,8 +106,6 @@ let displayNewPics = (data: any) => {
         imgs[i].onload = onLoadImg;
         imgs[i].src = data.message[i];
         (divs[i] as HTMLElement).style.display = "flex";
-        (btns[i * 2] as HTMLElement).style.display = "block";
-        (btns[i * 2 + 1] as HTMLElement).style.display = "block";
         (icons[i] as HTMLElement).style.display = "none";
     }
 }
@@ -108,9 +114,9 @@ function onLoadImg() {
     this.style.width = picWidth.toString() + "px";
 }
 
-export function setCardBtnsEnabled () {
+export function setCardBtnsEnabled() {
     document.querySelectorAll(".form-btn.card-button").
-    forEach(elem => (elem as HTMLButtonElement).disabled = false);
+        forEach(elem => (elem as HTMLButtonElement).disabled = false);
 }
 
 function displayNewPage(currentPage: number) {

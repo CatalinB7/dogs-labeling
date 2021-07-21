@@ -10,15 +10,18 @@ body {
 .title {
     text-align: center;
     font-size: 3rem;
+    width: 650px;
 }
 
 .my-form {
     font-size: 2rem;
     display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
-#name {
+#name, #password {
     width: 20vw;
     height: 50px;
     font-size: 2rem;
@@ -37,6 +40,25 @@ body {
     border-radius: 10px;
 }
 
+.form-div {
+    width: 100%;
+    margin: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+input {
+    margin: auto;
+}
+
+label[for="name"] {
+    width: 275px;
+}
+
+label[for="password"] {
+    width: 275px;
+}
+
 .form-btn:hover {
     background-color: rgb(184, 173, 173);
     cursor: pointer;
@@ -44,7 +66,7 @@ body {
 
 .form-btn.card-button:active:not([disabled]) {
     box-shadow: 0 3px #665;
-    transform: translateY(73px);
+    transform: translateY(3px);
     transition-duration: 0.05s;
 }
 
@@ -74,15 +96,21 @@ body {
     z-index: 2;
 }
 
-.card-div:hover > .card-button,
-.card-div:focus-within .card-button,
-.card-button:focus {
+.card-div:hover > .pref-div,
+.card-div:focus-within .pref-div,
+.pref-div:focus {   
     visibility: visible;
+    /* display: flex; */
     transition: all .5s ease-in-out;
     transform: translateY(75px);
 }
 
-.card-div:hover > .trashcan,
+.card-div:hover .card-button,
+.card-div:focus-within .card-button {
+    visibility: visible;
+}
+
+.card-div:hover .trashcan,
 .card-div:focus-within .trashcan {
     visibility: visible;
     transition: all .5s ease-in-out;
@@ -93,29 +121,29 @@ body {
 
 @keyframes rotation {
     33% {
-        transform: translateY(105px);
+        transform: translateY(55px);
     }
     67% {
-        transform-origin: center 105px;
-        transform: rotate(30deg) translateY(105px);
+        transform-origin: center 55px;
+        transform: rotate(30deg) translateY(55px);
     }
     78% {
-        transform-origin: center 105px;
-        transform: rotate(0deg) translateY(105px);
+        transform-origin: center 55px;
+        transform: rotate(0deg) translateY(55px);
     }
     89% {
-        transform-origin: center 105px;
-        transform: rotate(-30deg) translateY(105px);
+        transform-origin: center 55px;
+        transform: rotate(-30deg) translateY(55px);
     }
       100% {
-        transform-origin: center 105px;
-        transform: rotate(0deg) translateY(105px);
+        transform-origin: center 55px;
+        transform: rotate(0deg) translateY(55px);
     }
 }
 
 .card-div {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     width: 350px;
     justify-content: space-evenly;
@@ -127,7 +155,7 @@ body {
     min-width: 95px;
     height: 35px;
     margin: 10px;
-    margin-top: -100px;
+    /* margin-top: -100px; */
     font-size: 1rem;
     text-align: center;
     visibility: hidden;
@@ -138,11 +166,12 @@ body {
     margin: 10px;
     margin-top: -100px;
     font-size: 2.3rem;
-    visibility: hidden;
+    visibility: visible;
+    margin-left: 200px;
     padding: 0;
     border: none;
     background: none;
-    
+    margin-left: 0px;
 }
 
 .trashcan:hover {
@@ -198,3 +227,304 @@ body {
     transform: translateY(2px);
 }
 
+.login-menu {
+    background-color:rgb(0, 153, 255);
+    width: 100px;
+    position: absolute;
+    right: 0px;
+    height: 55px;
+    top:20px;
+    text-align: center;
+    padding-top: 15px;
+    display: none;
+    margin-top: 15px;
+    margin-right: 35px;
+}
+
+
+div.login-menu ul li {
+    background-color: rgb(0, 153, 255);
+    visibility: hidden; 
+    opacity: 0;
+    min-width: 5rem;
+    min-height: 2.5rem;
+    transition: all 0.5s ease;
+    display: none;
+    margin-left: -40px;
+    border: solid black 1px;
+    padding-top: 0.65rem;
+  }
+  
+.login-menu:hover {
+    cursor: pointer;
+    background-color: rgba(0, 89, 255);
+} 
+
+.login-menu:hover ul > li {
+    visibility: visible;
+    opacity: 1;
+    display: block;
+    cursor: pointer;
+}
+
+li:hover {
+    background-color: rgba(0, 89, 255);
+}
+
+
+.register {
+    background-color: rgb(233, 198, 198);
+    position: absolute;
+    right: 100px;
+    width: 100px;
+    height: 50px;
+    font-weight: 500;
+    font-size: 1.2rem;
+    border-radius: 10px;
+}
+
+.login {
+    background-color: rgb(233, 198, 198);
+    position: absolute;
+    right: 100px;
+    width: 100px;
+    height: 50px;
+    font-weight: 500;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    display: none;
+}
+
+.login:hover, .register:hover {
+    background-color: rgb(197, 170, 170);
+    cursor: pointer;
+}
+
+.login:active, .register:active {
+    transform: translateY(3px);
+    box-shadow: 0 3px #665;
+
+}
+
+#logH1 {
+    top: 100px;
+}
+
+#menu-name {
+    font-weight: 600;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: larger;
+}
+
+#error-div {
+    position: absolute;
+    top: 40vh;
+    left: 35vw;
+    width: 30vw;
+    height: 15vh;
+    background-color: azure;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.95;
+    z-index: 4;
+}
+
+#error-button {
+    margin-left: 30px;
+    align-self: center;
+    min-width: 6vw;
+    height: 45px;
+    color:darkblue;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    background-color: rgb(235, 221, 221);
+    border-radius: 10px;
+}
+
+#error-span {
+    font-weight: 600;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: larger;
+    color: red;
+    margin: 30px;
+    margin-bottom: 15px;
+}
+
+.selector-form {
+    /* position: relative; */
+    width: 22vw;
+    margin-top: 40px;
+}
+
+.chosen-value, .value-list {
+    /* position: absolute; */
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.chosen-value {
+    font-family: 'Ek Mukta';
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 4px;
+    height: 4rem;
+    font-size: 1.1rem;
+    padding: 1rem;
+    background-color: #fafcfd;
+    border: 3px solid transparent;
+    transition: 0.3s ease-in-out;
+    position: relative;
+}
+
+
+
+.value-list {
+    list-style: none;
+    margin-top: 0rem;
+    box-shadow: 0px 5px 8px 0px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    max-height: 0;
+    background-color: rgb(124, 124, 243);
+    transition: 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    width: 22vw;
+    position: absolute;
+    top: auto;
+    left: auto;
+
+}
+
+.chosen-value:hover~.value-list, .value-list:hover {
+    position: absolute;
+    top: auto;
+    left:auto;
+    max-height: 320px;
+    cursor: pointer;
+    overflow: visible;
+    z-index: 3;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+
+
+.value-list li {
+    position: relative;
+    height: 40px;
+    background-color: #fafcfd;
+    font-size: 1.1rem;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    opacity: 1;
+    width: 16.5vw;
+    text-align: center;
+    padding-top: 15px;
+}
+
+
+.value-list li:hover {
+    background-color: #ff908b;
+}
+
+.value-list.open {
+    max-height: 320px;
+    overflow: auto;
+}
+
+.value-list li.closed {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0;
+    opacity: 0;
+}
+
+.chosen-value:focus, .chosen-value.open {
+    box-shadow: 0px 5px 8px 0px rgba(0, 0, 0, 0.2);
+    background-color: #ff908b;
+    color: #000;
+}
+
+.insertCategory {
+    margin: 40px 0px 0px 50px;
+}
+
+.insert-input {
+    /* width: 210px; */
+    max-width: 0;
+    font-family: 'Ek Mukta';
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    height: 4rem;
+    font-size: 1.1rem;
+    padding: 1rem;
+    background-color: #fafcfd;
+    border: 3px solid transparent;
+    transition: 0.3s ease-in-out;
+    position: relative;
+    margin-top: 40px;
+    margin-left: 0px;
+    visibility: hidden;
+}
+
+.extend-input {
+    visibility: visible;
+    min-width: 210px;
+    transform: scaleX(1);
+    transform-origin: top left;
+    margin-left: 15px;
+}
+
+.pref-div {
+    overflow-x: auto;
+    width: 350px;
+    display: flex;
+    align-items: center;
+    margin-top: -100px;
+    visibility: hidden;
+}
+
+
+.del-cat {
+    display:"none";
+    margin-top: 35px;
+    margin-right: 35px;
+}
+
+.edit-cat {
+    display:"none";
+    margin-top: 35px;
+    margin-right: 35px; 
+}
+
+
+.change-cat-input {
+    /* width: 210px; */
+    max-width: 0;
+    font-family: 'Ek Mukta';
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    height: 4rem;
+    font-size: 1.1rem;
+    padding: 1rem;
+    background-color: #fafcfd;
+    border: 3px solid transparent;
+    transition: 0.3s ease-in-out;
+    position: relative;
+    margin-top: 40px;
+    margin-left: 0px;
+    visibility: hidden;
+}
+
+.extend-cat-input {
+    visibility: visible;
+    min-width: 210px;
+    transform: scaleX(1);
+    transform-origin: top left;
+    margin-left: 15px;
+}

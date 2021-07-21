@@ -6,6 +6,9 @@ export interface IResponse {
 
 export interface IFetchParams {
     id: number;
-    category: string;
+    category?: string;
+    oldCategory?: string;
+    newCategory?: string;
     link?: string
+    name: string
 }
